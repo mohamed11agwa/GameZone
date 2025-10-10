@@ -1,3 +1,6 @@
+using GameZone.IRepository;
+using GameZone.Repository;
+
 namespace GameZone
 {
     public class Program
@@ -8,7 +11,9 @@ namespace GameZone
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+            builder.Services.AddScoped<IDeviceRepo, DeviceRepo>();
+            builder.Services.AddScoped<IGameRepo, GameRepo>();
 
             string ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                                             ?? throw new InvalidOperationException("No Connection String Was Found");

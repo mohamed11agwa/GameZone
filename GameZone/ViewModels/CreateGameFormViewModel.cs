@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using GameZone.Attributes;
+using GameZone.CustomAttributes;
+using GameZone.Settings;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 namespace GameZone.ViewModels
 {
@@ -15,8 +19,11 @@ namespace GameZone.ViewModels
         public IEnumerable<SelectListItem> Categories { get; set; } = Enumerable.Empty<SelectListItem>();
 
         [Display(Name = "Supported Devices")]
-        public List<int> SelectedDevices { get; set; } = new List<int>();
+        public List<int> SelectedDevices { get; set; } = default!;
         public IEnumerable<SelectListItem> Devices { get; set; } = Enumerable.Empty<SelectListItem>();
+
+        [AllowedExtensions(allowedExtensions: FileSettings.AllowedExtensions),
+            MaxFileSize(FileSettings.MaxFileSizeInBytes)]
         public IFormFile Cover { get; set; } = default!;
 
 

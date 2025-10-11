@@ -19,6 +19,11 @@ namespace GameZone.Repository
             imagesPath = $"{webHostEnvironment.WebRootPath}{FileSettings.ImagesPath}";
         }
 
+        public IEnumerable<Game> GetAll()
+        {
+            var games = Context.Games.Include(g => g.Category).Include(g => g.Devices).AsNoTracking().ToList();
+            return games;
+        }
 
         public async Task Create(CreateGameFormViewModel model)
         {
@@ -39,5 +44,7 @@ namespace GameZone.Repository
 
 
         }
+
+       
     }
 }

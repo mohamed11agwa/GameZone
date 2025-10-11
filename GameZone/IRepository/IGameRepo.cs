@@ -1,9 +1,11 @@
-﻿using GameZone.ViewModels;
+﻿using GameZone.Models;
+using GameZone.ViewModels;
 
 namespace GameZone.IRepository
 {
     public interface IGameRepo
     {
-       public Task Create(CreateGameFormViewModel model);
+        public IEnumerable<Game> GetAll();
+        public Task Create(CreateGameFormViewModel model);
     }
 }

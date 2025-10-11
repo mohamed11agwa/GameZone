@@ -21,7 +21,8 @@ namespace GameZone.Controllers
         }
         public IActionResult Index()
         {
-            return View("Index");
+            var games = GameRepo.GetAll();
+            return View(games);
         }
 
         [HttpGet]

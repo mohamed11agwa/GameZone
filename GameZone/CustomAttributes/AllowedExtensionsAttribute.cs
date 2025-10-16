@@ -10,16 +10,19 @@
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             var file = value as IFormFile;
-            if(file == null)
+
+            if (file is not null)
             {
-                return new ValidationResult("Please select a file.");
+                var extension = Path.GetExtension(file.FileName);
+
+                var isAllowed = AllowedExtensions.Split(',').Contains(extension, StringComparer.OrdinalIgnoreCase);
+
+                if (!isAllowed)
+                {
+                    return new ValidationResult($"Only {AllowedExtensions} are allowed!");
+                }
             }
-            var extension = Path.GetExtension(file.FileName);
-            var IsAllowed = AllowedExtensions.Split(',').Contains(extension, StringComparer.OrdinalIgnoreCase);
-            if(!IsAllowed)
-            {
-                return new ValidationResult($"This file extension is not allowed. Allowed extensions are: {AllowedExtensions}");
-            }
+
             return ValidationResult.Success;
         }
     }

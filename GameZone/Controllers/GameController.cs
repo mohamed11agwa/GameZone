@@ -25,6 +25,14 @@ namespace GameZone.Controllers
             return View(games);
         }
 
+        public IActionResult Details(int id)
+        {
+            var game = GameRepo.GetById(id);
+            if(game == null)
+                return NotFound();
+            return View(game);
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -57,7 +65,58 @@ namespace GameZone.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var game = GameRepo.GetById(id);
+            if(game == null)
+                return NotFound();
+            EditGameFormViewModel viewModel = new EditGameFormViewModel();
+            viewModel.Id = game.Id;
+            viewModel.Name = game.Name;
+            viewModel.Description = game.Description;
+            viewModel.CategoryId = game.CategoryId;
+            viewModel.SelectedDevices = game.Devices.Select(d => d.Id).ToList();
+            viewModel.Categories = CategoryRepo.GetSelectList();
+            viewModel.Devices = DeviceRepo.GetSelectList();
+            viewModel.CurrentCover = game.Cover;
+
+            return View(viewModel);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditGameFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Categories = CategoryRepo.GetSelectList();
+                model.Devices = DeviceRepo.GetSelectList();
+
+                return View(model);
+            }
+            //save Game to database
+            //save cover to Server
+            
+            var game = await GameRepo.Edit(model);
+
+            if (game == null)
+                return BadRequest();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        [HttpDelete]
+        public IActionResult Delete(int id) 
+        {
+            var isDeleted = GameRepo.Delete(id);
+
+            return isDeleted? Ok(): BadRequest();
+        }
+
 
     }
 }
-//Call of Duty is a 2003 first-person shooter game developed by Infinity Ward and published by Activision. It is the first installment in the Call of Duty franchise, released on October 29, 2003, for Microsoft Windows.

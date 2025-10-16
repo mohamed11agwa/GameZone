@@ -10,14 +10,15 @@
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             var file = value as IFormFile;
-            if (file == null)
+
+            if (file is not null)
             {
-                return new ValidationResult("Please select a file.");
+                if (file.Length > MaxFileSize)
+                {
+                    return new ValidationResult($"Maximum allowed size is {MaxFileSize} bytes");
+                }
             }
-            if(file.Length > MaxFileSize)
-            {
-                return new ValidationResult($"The file size exceeds the maximum allowed size of {MaxFileSize} bytes.");
-            }
+
             return ValidationResult.Success;
         }
     }
